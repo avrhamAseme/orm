@@ -1,0 +1,29 @@
+
+
+services:
+  db: 
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password1
+      POSTGRES_DB: environments
+    ports:
+      - "5432:5432"
+    volumes:
+      - "C:/Users/avrah/orm/databaseVolume:/var/lib/postgresql/data"
+    
+
+  orm-api:
+    image: localhost:5000/orm-api:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_HOSTNAME=172.23.96.1
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=Password1
+      - DATABASE_NAME=environments
+    depends_on:
+      db:
+        condition: service_started
+        restart: true
